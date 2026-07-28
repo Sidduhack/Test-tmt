@@ -7,10 +7,37 @@ export default async function handler(req, res) {
 
   const { name, email, message } = req.body;
 
-  // Send email here
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
-  return res.status(200).json({
-    success: true,
-    message: "Feedback received!"
-  });
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `New Feedback from ${name}`,
+      text: `
+Name: ${name}
+Email: ${email}
+
+Message:
+${message}
+      `,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Feedback received!",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send email.",
+    });
+  }
 }

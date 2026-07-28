@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUD</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:linear-gradient(135deg,#0f172a,#1e293b,#111827);
+}
+
+.card{
+    width:340px;
+    padding:35px;
+    text-align:center;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+}
+
+.icon{
+    font-size:70px;
+}
+
+h2{
+    color:white;
+    margin:15px 0;
+}
+
+p{
+    color:#bfbfbf;
+    margin-bottom:25px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    background:#00c853;
+    color:white;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(0,200,83,.4);
+}
+
+#status{
+    margin-top:20px;
+    color:#00ff99;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <div class="icon">📋</div>
+
+    <h2>HUD cide</h2>
+
+    <p>Click the button below to copy the predefined text.</p>
+
+    <button onclick="copyText()">Copy Now</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+// ========= EDIT YOUR TEXT HERE =========
+const textToCopy = `
+#FFHUDT6O3jqbYXkFPo7eN
+`;
+// ======================================
+
+function copyText(){
+    navigator.clipboard.writeText(textToCopy).then(()=>{
+        document.getElementById("status").innerHTML="✅ Copied Successfully!";
+    }).catch(()=>{
+        document.getElementById("status").innerHTML="❌ Copy Failed!";
+    });
+}
+</script>
+
+</body>
+</html>

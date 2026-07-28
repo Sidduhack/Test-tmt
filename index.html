@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>TMT OFFICIAL — Free Fire Gameplay & Funny Commentary</title>
+<meta name="description" content="TMT OFFICIAL: high-energy Free Fire gameplay, clutch headshots, and funny commentary. 50K+ subscribers, 1,300+ videos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root{
+    --ink:#050506;
+    --surface:#0d0e12;
+    --surface-2:#15161c;
+    --glass: rgba(255,255,255,0.045);
+    --line: rgba(238,240,244,0.09);
+    --ember:#ff5a36;
+    --ember-deep:#c7361a;
+    --volt:#4df0ff;
+    --bone:#eef0f4;
+    --muted:#9195a3;
+
+    --space-1:8px; --space-2:16px; --space-3:24px; --space-4:40px;
+    --space-5:64px; --space-6:96px; --space-7:140px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--ember-deep); color:var(--bone); }
+  :focus-visible{ outline:2px solid var(--volt); outline-offset:3px; border-radius:2px; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 var(--space-3); }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--ember); display:flex; align-items:center; gap:10px; margin-bottom:var(--space-2);
+  }
+  .eyebrow::before{ content:''; width:20px; height:1px; background:var(--ember); display:inline-block; }
+  h1,h2,h3{ font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em; }
+  .section{ padding:var(--space-6) 0; position:relative; }
+  .section-head{ max-width:60ch; margin-bottom:var(--space-5); }
+  .section-head h2{ font-size:clamp(1.9rem,4vw,2.7rem); line-height:1.1; }
+  .section-head p{ color:var(--muted); margin-top:var(--space-2); font-size:1.05rem; }
+
+  /* reveal-on-scroll */
+  [data-reveal]{ opacity:0; transition:opacity 700ms ease, transform 700ms ease; }
+  [data-reveal="up"]{ transform:translateY(28px); }
+  [data-reveal="left"]{ transform:translateX(-28px); }
+  [data-reveal="right"]{ transform:translateX(28px); }
+  [data-reveal="scale"]{ transform:scale(0.94); }
+  [data-reveal].is-visible{ opacity:1; transform:none; }
+
+
+
+  /* ============ INTRO ============ */
+  #intro{
+    position:fixed; inset:0; z-index:200; background:var(--ink);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    transition:opacity 700ms ease, visibility 700ms ease;
+  }
+  #intro.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  #intro canvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .intro-mark{ position:relative; text-align:center; z-index:2; }
+  .intro-logo{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(2.4rem,7vw,4rem);
+    letter-spacing:0.02em; opacity:0; transform:translateY(16px);
+    animation: introIn 900ms cubic-bezier(.2,.8,.2,1) 300ms forwards;
+    position:relative; overflow:hidden;
+  }
+  .intro-logo::after{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
+    animation: sweep 1600ms ease 1200ms 1;
+  }
+  @keyframes introIn{ to{ opacity:1; transform:translateY(0); } }
+  @keyframes sweep{ to{ left:130%; } }
+  .intro-tag{
+    font-family:'JetBrains Mono',monospace; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--muted); margin-top:var(--space-2); opacity:0;
+    animation: fadeIn 700ms ease 1300ms forwards;
+  }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+.live-counter{
+    width:100%;
+    max-width:400px;
+    margin:auto;
+}
+
+.live-counter iframe{
+    width:100%;
+    height:200px;
+    border:none;
+    border-radius:16px;
+    background:transparent;
+}
+
+.live-panel{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.live-panel-frame{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+}
+
+.live-panel-frame iframe{
+    display:block;
+    margin:0 auto;
+    width:400px;
+    height:100px;
+    border:none;
+}
+
+  /* ============ NAV ============ */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:var(--space-2) 0;
+    background:transparent;
+    transition:background 300ms ease, border-color 300ms ease, backdrop-filter 300ms ease;
+    border-bottom:1px solid transparent;
+    opacity:0;
+  }
+  header.ready{ opacity:1; transition:opacity 600ms ease 400ms; }
+  header.scrolled{
+    background:rgba(5,5,6,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom-color:var(--line);
+  }
+  nav{ display:flex; align-items:center; justify-content:space-between; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.15rem; }
+  .brand-mark{
+    width:32px; height:32px; border-radius:8px;
+    background:linear-gradient(135deg, var(--ember), var(--ember-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem; font-weight:700; color:var(--ink);
+  }
+  .navlinks{ display:flex; gap:var(--space-4); list-style:none; }
+  .navlinks a{
+    font-size:0.88rem; color:var(--muted); position:relative; padding:10px 2px; min-height:44px; display:inline-flex; align-items:center;
+    transition:color 200ms ease;
+  }
+  .navlinks a::after{
+    content:''; position:absolute; left:0; bottom:6px; width:0; height:1.5px; background:var(--ember);
+    transition:width 250ms ease;
+  }
+  .navlinks a:hover{ color:var(--bone); }
+  .navlinks a:hover::after{ width:100%; }
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:10px 20px;
+    border-radius:999px; border:1px solid var(--line); font-size:0.85rem; font-weight:500;
+    transition:border-color 200ms ease, transform 200ms ease;
+  }
+  .nav-cta:hover{ border-color:var(--ember); transform:translateY(-1px); }
+  .menu-btn{ display:none; }
+  @media (max-width:860px){
+    .navlinks, .nav-cta{ display:none; }
+    .menu-btn{
+      display:flex; width:44px; height:44px; align-items:center; justify-content:center;
+      background:none; border:1px solid var(--line); border-radius:8px; cursor:pointer;
+    }
+    .menu-btn svg{ width:20px; height:20px; }
+  }
+  #mobile-menu{
+    position:fixed; inset:0; z-index:99; background:rgba(5,5,6,0.98);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-3);
+    transform:translateY(-8px); opacity:0; pointer-events:none; transition:all 280ms ease;
+  }
+  #mobile-menu.open{ opacity:1; transform:none; pointer-events:auto; }
+  #mobile-menu a{ font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:600; }
+
+
+
+  /* ============ HERO ============ */
+  .hero{ position:relative; padding:calc(var(--space-7) + 40px) 0 var(--space-6); overflow:hidden; }
+  #hero-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:0.55; }
+  .hero-glow{
+    position:absolute; top:-20%; left:50%; transform:translateX(-50%);
+    width:900px; height:900px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,90,54,0.16), transparent 65%);
+    z-index:0; pointer-events:none;
+  }
+  .hero-inner{ position:relative; z-index:1; }
+  .hero-frame{
+    display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:0.75rem;
+    letter-spacing:0.12em; color:var(--volt); border:1px solid rgba(77,240,255,0.3); padding:6px 14px; border-radius:999px;
+    margin-bottom:var(--space-3); text-transform:uppercase;
+  }
+  .hero-frame .dot{ width:6px; height:6px; border-radius:50%; background:var(--volt); animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .hero h1{
+    font-size:clamp(3rem,9vw,6.2rem); line-height:0.96; letter-spacing:-0.02em; max-width:14ch;
+  }
+  .hero h1 span{
+    background:linear-gradient(100deg, var(--bone), var(--ember) 60%, var(--volt));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{ margin-top:var(--space-3); max-width:52ch; font-size:1.15rem; color:var(--muted); }
+  .hero-actions{ display:flex; gap:var(--space-2); flex-wrap:wrap; margin-top:var(--space-4); }
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:0.92rem; padding:15px 28px; min-height:44px;
+    border-radius:10px; display:inline-flex; align-items:center; gap:10px; transition:transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+  }
+  .btn-solid{ background:linear-gradient(135deg, var(--ember), var(--ember-deep)); color:#0b0603; border:none; }
+  .btn-solid:hover{ transform:translateY(-2px); box-shadow:0 12px 30px -10px rgba(255,90,54,0.5); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--bone); }
+  .btn-ghost:hover{ border-color:var(--bone); transform:translateY(-2px); }
+
+  .hero-stats{ display:flex; gap:var(--space-5); margin-top:var(--space-6); flex-wrap:wrap; }
+  .stat b{
+    font-family:'JetBrains Mono',monospace; font-size:2rem; font-weight:600;
+    background:linear-gradient(100deg, var(--ember), var(--volt));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    display:block;
+  }
+  .stat span{ font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+  .scroll-cue{
+    position:absolute; bottom:var(--space-3); left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:6px; color:var(--muted); font-size:0.7rem;
+    letter-spacing:0.15em; text-transform:uppercase; z-index:1;
+  }
+  .scroll-cue .line{ width:1px; height:28px; background:linear-gradient(var(--ember), transparent); animation:scrollLine 1.8s ease infinite; }
+  @keyframes scrollLine{ 0%{ transform:scaleY(0); transform-origin:top;} 50%{ transform:scaleY(1); transform-origin:top;} 51%{ transform-origin:bottom;} 100%{ transform:scaleY(0); transform-origin:bottom;} }
+
+  /* ticker */
+  .ticker{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden; white-space:nowrap; padding:var(--space-2) 0; background:var(--surface); }
+  .ticker-track{ display:inline-flex; gap:48px; animation:tickerMove 26s linear infinite; }
+  @keyframes tickerMove{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .ticker span{ font-family:'JetBrains Mono',monospace; font-size:0.85rem; letter-spacing:0.05em; color:var(--muted); }
+  .ticker span b{ color:var(--ember); }
+
+  /* ============ CARDS (generic) ============ */
+  .grid{ display:grid; gap:var(--space-3); }
+  .grid-3{ grid-template-columns:repeat(3,1fr); }
+  .grid-4{ grid-template-columns:repeat(4,1fr); }
+  @media (max-width:960px){ .grid-3{ grid-template-columns:repeat(2,1fr);} .grid-4{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .grid-3, .grid-4{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--glass); border:1px solid var(--line); border-radius:16px; padding:var(--space-3);
+    transition:transform 220ms ease, border-color 220ms ease, background 220ms ease;
+    position:relative; overflow:hidden;
+  }
+  .card:hover{ transform:translateY(-4px); border-color:rgba(255,90,54,0.35); background:rgba(255,255,255,0.06); }
+  .card .icon{
+    width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, rgba(255,90,54,0.18), rgba(77,240,255,0.12)); margin-bottom:var(--space-2);
+  }
+  .card .icon svg{ width:22px; height:22px; stroke:var(--ember); }
+  .card h3{ font-size:1.15rem; margin-bottom:8px; }
+  .card p{ color:var(--muted); font-size:0.92rem; }
+
+  /* ============ ABOUT ============ */
+  .about-layout{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6); align-items:start; }
+  @media (max-width:860px){ .about-layout{ grid-template-columns:1fr; gap:var(--space-4); } }
+  .live-panel{
+    grid-column: 1 / -1;
+    margin-top: var(--space-2);
+    display:flex; align-items:center; gap:var(--space-3); flex-wrap:wrap;
+  }
+  .live-panel-frame{
+    background:#000; border-radius:14px; overflow:hidden; border:1px solid var(--line);
+    flex-shrink:0;
+  }
+  .live-panel-frame iframe{ display:block; width:280px; height:175px; border:0; }
+  .live-panel-copy h4{ font-family:'Space Grotesk',sans-serif; font-size:1rem; margin-bottom:6px; }
+  .live-panel-copy p{ color:var(--muted); font-size:0.85rem; max-width:36ch; }
+  .live-panel-copy a{ color:var(--ember); text-decoration:underline; }
+  @media (max-width:480px){ .live-panel-frame iframe{ width:100%; max-width:280px; } }
+  .about-layout p{ color:var(--muted); margin-bottom:var(--space-2); max-width:52ch; }
+  .timeline{ border-left:1px solid var(--line); padding-left:var(--space-3); display:flex; flex-direction:column; gap:var(--space-3); margin-top:var(--space-4); }
+  .timeline-item{ position:relative; }
+  .timeline-item::before{ content:''; position:absolute; left:calc(var(--space-3) * -1 - 5px); top:4px; width:9px; height:9px; border-radius:50%; background:var(--ember); }
+  .timeline-item time{ font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--ember); text-transform:uppercase; letter-spacing:0.08em; }
+  .timeline-item h4{ font-family:'Space Grotesk',sans-serif; font-size:1.05rem; margin:4px 0; }
+  .timeline-item p{ font-size:0.9rem; }
+
+  /* ============ SETUP (AI Studio -> Gear & Sensitivity) ============ */
+  .setup-card{ display:flex; flex-direction:column; height:100%; }
+  .setup-card .tag{ font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--volt); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:var(--space-1); }
+  .setup-card .dl{
+    margin-top:auto; padding-top:var(--space-2); display:flex; align-items:center; gap:8px;
+    font-size:0.85rem; font-weight:600; color:var(--bone); border-top:1px solid var(--line); margin-top:var(--space-2); padding-top:var(--space-2);
+  }
+
+  /* ============ CLIPS / VIDEO GALLERY ============ */
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:var(--space-4); }
+  .filter-btn{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase;
+    padding:10px 18px; min-height:44px; border-radius:999px; border:1px solid var(--line); color:var(--muted);
+    background:transparent; cursor:pointer; transition:all 200ms ease;
+  }
+  .filter-btn.active, .filter-btn:hover{ border-color:var(--ember); color:var(--bone); }
+  .clip{
+    position:relative; border-radius:14px; overflow:hidden; aspect-ratio:16/9; cursor:pointer;
+    border:1px solid var(--line); background:linear-gradient(160deg, var(--surface-2), var(--surface));
+  }
+  .clip .thumb-mark{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-size:0.85rem; color:var(--muted); text-align:center; padding:var(--space-2);
+  }
+  .clip .overlay{
+    position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,0.85), transparent 60%);
+    display:flex; flex-direction:column; justify-content:flex-end; padding:var(--space-2);
+    opacity:0; transition:opacity 220ms ease;
+  }
+  .clip:hover .overlay{ opacity:1; }
+  .clip:hover{ transform:scale(1.015); border-color:rgba(255,90,54,0.4); }
+  .clip h4{ font-size:0.95rem; font-family:'Space Grotesk',sans-serif; }
+  .clip .cat{ font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--ember); text-transform:uppercase; margin-bottom:4px; }
+  .play-ring{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:52px; height:52px; border-radius:50%;
+    border:1.5px solid rgba(238,240,244,0.5); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 220ms ease;
+  }
+  .clip:hover .play-ring{ opacity:1; }
+  .play-ring svg{ width:18px; height:18px; fill:var(--bone); margin-left:2px; }
+  .clip-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-2); }
+  @media (max-width:860px){ .clip-grid{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .clip-grid{ grid-template-columns:1fr;} }
+  .clip img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .clip-status{ grid-column:1/-1; text-align:center; padding:var(--space-4); color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:0.85rem; }
+  .clip-status a{ color:var(--ember); text-decoration:underline; }
+
+  /* video lightbox */
+  .lightbox{
+    position:fixed; inset:0; z-index:150; background:rgba(5,5,6,0.94);
+    display:flex; align-items:center; justify-content:center; padding:var(--space-3);
+    opacity:0; pointer-events:none; transition:opacity 250ms ease;
+  }
+  .lightbox.open{ opacity:1; pointer-events:auto; }
+  .lightbox-inner{ width:100%; max-width:960px; aspect-ratio:16/9; position:relative; background:#000; border-radius:12px; overflow:hidden; }
+  .lightbox-inner iframe{ width:100%; height:100%; border:0; }
+  .lightbox-close{
+    position:absolute; top:-52px; right:0; width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--line); background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .lightbox-close svg{ width:18px; height:18px; stroke:var(--bone); }
+  .lightbox-close:hover{ border-color:var(--ember); }
+
+  /* ============ TESTIMONIALS ============ */
+  .quote-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-3); }
+  @media (max-width:860px){ .quote-row{ grid-template-columns:1fr; } }
+  .quote-card{ background:var(--glass); border:1px solid var(--line); border-radius:16px; padding:var(--space-3); }
+  .quote-card p{ font-size:1rem; color:var(--bone); margin-bottom:var(--space-2); }
+  .quote-card .who{ display:flex; align-items:center; gap:10px; }
+  .avatar{ width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--ember), var(--volt)); flex-shrink:0; }
+  .who-name{ font-size:0.85rem; font-weight:600; }
+  .who-meta{ font-size:0.75rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  /* ============ FAQ ============ */
+  .faq-item{ border-bottom:1px solid var(--line); }
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; color:var(--bone); cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center; padding:var(--space-3) 0; min-height:44px;
+    font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:500;
+  }
+  .faq-q svg{ width:18px; height:18px; flex-shrink:0; transition:transform 250ms ease; stroke:var(--muted); }
+  .faq-item.open .faq-q svg{ transform:rotate(45deg); stroke:var(--ember); }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height 300ms ease; }
+  .faq-item.open .faq-a{ max-height:220px; }
+  .faq-a p{ color:var(--muted); padding-bottom:var(--space-3); max-width:65ch; }
+
+  /* ============ DOWNLOADS ============ */
+  .dl-card{ display:flex; flex-direction:column; }
+  .dl-card .filetag{
+    display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+    color:var(--volt); border:1px solid rgba(77,240,255,0.3); padding:4px 10px; border-radius:999px; width:fit-content; margin-bottom:var(--space-2);
+  }
+  .dl-btn{
+    margin-top:auto; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    min-height:44px; border-radius:8px; border:1px solid var(--line); font-size:0.85rem; font-weight:600;
+    transition:border-color 200ms ease, transform 200ms ease;
+  }
+  .dl-btn:hover{ border-color:var(--ember); transform:translateY(-2px); }
+
+  /* ============ CONTACT ============ */
+  .contact-layout{ display:grid; grid-template-columns:1fr 1.1fr; gap:var(--space-5); }
+  @media (max-width:860px){ .contact-layout{ grid-template-columns:1fr; } }
+  .contact-info-item{ display:flex; gap:12px; align-items:flex-start; margin-bottom:var(--space-3); }
+  .contact-info-item .icon{ width:38px; height:38px; border-radius:9px; background:var(--glass); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .contact-info-item .icon svg{ width:18px; height:18px; stroke:var(--ember); }
+  .contact-info-item h4{ font-size:0.95rem; margin-bottom:2px; }
+  .contact-info-item p{ font-size:0.88rem; color:var(--muted); }
+  .form-panel{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:var(--space-4); }
+  .field{ position:relative; margin-bottom:var(--space-3); }
+  .field input, .field textarea{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); color:var(--bone);
+    padding:20px 16px 8px; min-height:56px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.95rem;
+  }
+  .field textarea{ min-height:110px; resize:vertical; padding-top:22px; }
+  .field label{
+    position:absolute; left:16px; top:17px; font-size:0.95rem; color:var(--muted); pointer-events:none;
+    transition:all 180ms ease;
+  }
+  .field input:focus, .field textarea:focus{ border-color:var(--ember); }
+  .field input:focus + label, .field input:not(:placeholder-shown) + label,
+  .field textarea:focus + label, .field textarea:not(:placeholder-shown) + label{
+    top:8px; font-size:0.7rem; color:var(--ember); letter-spacing:0.04em; text-transform:uppercase;
+  }
+  .field .hint{ font-size:0.75rem; color:#e0555a; margin-top:6px; display:none; }
+  .field.error input, .field.error textarea{ border-color:#e0555a; }
+  .field.error .hint{ display:block; }
+  .form-status{ font-size:0.85rem; color:var(--volt); margin-top:var(--space-2); display:none; }
+  .form-status.show{ display:block; }
+
+  /* ============ FOOTER ============ */
+  footer{ border-top:1px solid var(--line); padding:var(--space-6) 0 var(--space-4); }
+  .footer-top{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:var(--space-4); margin-bottom:var(--space-5); }
+  @media (max-width:780px){ .footer-top{ grid-template-columns:1fr 1fr; } }
+  .footer-col h5{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:var(--space-2); }
+  .footer-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col a{ font-size:0.9rem; color:var(--bone); opacity:0.85; }
+  .footer-col a:hover{ opacity:1; color:var(--ember); }
+  .newsletter-form{ display:flex; gap:8px; margin-top:var(--space-2); }
+  .newsletter-form input{
+    flex:1; background:var(--surface-2); border:1px solid var(--line); color:var(--bone); padding:12px 14px;
+    border-radius:8px; min-height:44px; font-size:0.88rem;
+  }
+  .newsletter-form button{
+    background:var(--ember); color:#0b0603; border:none; border-radius:8px; padding:0 20px; min-height:44px; font-weight:600; cursor:pointer;
+  }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-2); padding-top:var(--space-3); border-top:1px solid var(--line); color:var(--muted); font-size:0.82rem; }
+  .socials{ display:flex; gap:12px; }
+  .socials a{ width:38px; height:38px; border-radius:9px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+  .socials a:hover{ border-color:var(--ember); }
+  .socials svg{ width:16px; height:16px; stroke:var(--bone); }
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO ============ -->
+<div id="intro" aria-hidden="true">
+  <canvas id="intro-canvas"></canvas>
+  <div class="intro-mark">
+    <div class="intro-logo">TMT OFFICIAL</div>
+    <div class="intro-tag">FREE FIRE · GAMEPLAY · COMMENTARY</div>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header id="site-header">
+  <div class="wrap">
+    <nav>
+      <div class="brand"><span class="brand-mark">T</span>TMT OFFICIAL</div>
+      <ul class="navlinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#content">Content</a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#clips">Clips</a></li>
+        <li><a href="#downloads">Downloads</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a class="nav-cta" href="#contact">Get in touch</a>
+      <button class="menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div id="mobile-menu">
+  <a href="#about">About</a>
+  <a href="#content">Content</a>
+  <a href="#setup">Setup</a>
+  <a href="#clips">Clips</a>
+  <a href="#downloads">Downloads</a>
+  <a href="#faq">FAQ</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-frame"><span class="dot"></span>LIVE ON YOUTUBE &amp; INSTAGRAM</div>
+      <h1>Headshots.<br><span>Chaos. Comedy.</span></h1>
+      <p class="hero-sub">TMT OFFICIAL is high-energy Free Fire gameplay built for gamers who want clutch plays, funny commentary, and zero boring moments — every single upload.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="https://youtube.com/@tmt_official-y2x?si=K4ClM4ZsecYCEe5j" target="_blank" rel="noopener">Watch on YouTube</a>
+        <a class="btn btn-ghost" href="https://www.instagram.com/tmt_rocky_yt?igsh=anlxdmUwMGdkN3dh" target="_blank" rel="noopener">Follow on Instagram</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b id="sub-count" data-fallback="50000">0</b><span>Subscribers</span></div>
+        <div class="stat"><b data-count="1300" data-suffix="+">0</b><span>Videos uploaded</span></div>
+        <div class="stat"><b data-count="100" data-suffix="%">0</b><span>Funny, guaranteed</span></div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>NO GRAVITY. <b>NO MERCY.</b></span>
+      <span>NEW CLIPS <b>EVERY WEEK</b></span>
+      <span><b>50K+</b> SQUAD MEMBERS</span>
+      <span>RANKED PUSH · <b>FUNNY REACTIONS</b></span>
+      <span>NO GRAVITY. <b>NO MERCY.</b></span>
+      <span>NEW CLIPS <b>EVERY WEEK</b></span>
+      <span><b>50K+</b> SQUAD MEMBERS</span>
+      <span>RANKED PUSH · <b>FUNNY REACTIONS</b></span>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about-layout">
+        <div data-reveal="left">
+          <div class="eyebrow">About</div>
+          <h2>Built by one gamer, for a whole squad of them.</h2>
+          <p style="margin-top:var(--space-3);">TMT OFFICIAL — known to the squad as TMT Rocky — started the channel to make Free Fire gameplay people would actually want to watch twice: the clutch, the commentary, and the moments that only make sense mid-match.</p>
+          <p>Over 1,300 uploads later, the mission hasn't changed — real gameplay, real reactions, and enough humor that even a loss feels like a highlight.</p>
+          <div class="timeline">
+            <div class="timeline-item"><time>Season One</time><h4>Channel goes live</h4><p>First uploads focused on ranked pushes and raw gameplay.</p></div>
+            <div class="timeline-item"><time>Growth Arc</time><h4>Commentary becomes the signature</h4><p>Funny voiceovers and live reactions turn casual viewers into regulars.</p></div>
+            <div class="timeline-item"><time>50K Milestone</time><h4>The squad crosses 50,000</h4><p>1,300+ videos deep and still uploading every week.</p></div>
+          </div>
+        </div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;" data-reveal="right">
+          <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><h3>50K+</h3><p>Subscribers strong and growing every week.</p></div>
+          <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div><h3>1,300+</h3><p>Videos uploaded — and counting.</p></div>
+          <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Weekly</h3><p>Fresh uploads, so the squad never runs dry.</p></div>
+          <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 12h8M12 8v8"/></svg></div><h3>Community</h3><p>Every clip is picked with the comment section in mind.</p></div>
+          <div class="live-panel">
+	<div class="live-counter">
+          <iframe
+            src="https://livecounts.xyz/embed-customized/youtube-live-subscriber-count/UCeIoosu2QLT2P5HhWDsS_aA?data=%7B%22theme%22%3A%22dark%22%2C%22background_color%22%3A%22Transparent%22%2C%22text_color%22%3A%22%23F2F2F2%22%2C%22odometer%22%3A%7B%22speed%22%3A%220.5%22%2C%22up%22%3A%22%232ECC71%22%2C%22down%22%3A%22%23E74C3C%22%7D%2C%22only_count%22%3A%7B%22enabled%22%3Afalse%2C%22vertically_centered%22%3Afalse%2C%22font_size%22%3A%22%22%7D%2C%22only_chart%22%3A%7B%22enabled%22%3Afalse%2C%22type%22%3A%22%22%2C%22len%22%3A7200%2C%22color%22%3A%22%22%7D%7D"
+            loading="lazy"
+            >
+          </iframe>
+	  
+	</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTENT PILLARS ============ -->
+  <section class="section" id="content">
+    <div class="wrap">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">What I Create</div>
+        <h2>Four kinds of content, one squad mentality.</h2>
+        <p>Every upload lands in one of these lanes — pick a favorite, or watch them all.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card" data-reveal="up"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6l-6.3 4.4 2.3-7.2-6-4.4h7.6z"/></svg></div><h3>Ranked Gameplay</h3><p>Full ranked pushes, clutch clips, and every close call.</p></div>
+        <div class="card" data-reveal="up"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 9h8M8 13h5M21 12c0 4.4-4 8-9 8-1.3 0-2.6-.2-3.7-.7L3 20l1.1-4C3.4 14.8 3 13.4 3 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg></div><h3>Funny Commentary</h3><p>Live reactions and voice-over chaos over every match.</p></div>
+        <div class="card" data-reveal="up"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div><h3>Headshot Montages</h3><p>Slow-mo, sound-designed cuts of the cleanest eliminations.</p></div>
+        <div class="card" data-reveal="up"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><h3>Live Reactions</h3><p>Unfiltered first watches of new events, updates, and drops.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SETUP & SENSITIVITY (AI Studio slot) ============ -->
+  <section class="section" id="setup">
+    <div class="wrap">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">Gear &amp; Setup</div>
+        <h2>The exact setup behind every clip.</h2>
+        <p>The squad's most-asked question, answered — device, sensitivity, and HUD, all in one place.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card setup-card" data-reveal="up"><div class="tag">Device</div><h3>Mobile rig</h3><p>The phone, cooler, and grip setup used in every ranked session.</p></div>
+        <div class="card setup-card" data-reveal="up"><div class="tag">Sensitivity</div><h3>Aim settings</h3><p>General, red dot, 2x, 4x, and sniper scope values, tuned for headshots.</p></div>
+        <div class="card setup-card" data-reveal="up"><div class="tag">HUD</div><h3>Layout &amp; controls</h3><p>Button placement and HUD size for fast, clean reactions.</p></div>
+        <div class="card setup-card" data-reveal="up"><div class="tag">Edit</div><h3>Editing stack</h3><p>The software and presets used to cut, color, and sound-design every clip.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLIPS / VIDEO GALLERY ============ -->
+  <section class="section" id="clips">
+    <div class="wrap">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">Latest upload</div>
+        <h2>The best of 1,300+ uploads, sorted for you.</h2>
+        <p>Pulled live from the TMT OFFICIAL.</p>
+        <a href ="https://tmt-official.co.in"> click me for more </a>
+      </div>
+      <div class="filters" role="tablist" aria-label="Filter clips by category" id="clip-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+      </div>
+      <div class="clip-grid" id="clip-grid">
+        <div class="clip-status">Loading clips…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOWNLOADS ============ -->
+  <section class="section" id="downloads">
+    <div class="wrap">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">Downloads</div>
+        <h2>Free resources for the squad.</h2>
+        <p>Attach the real files when ready — these cards are wired up and waiting.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card dl-card" data-reveal="up">
+          <div class="filetag">.JSON</div>
+          <h3>Sensitivity settings</h3>
+          <p>The exact aim sensitivity file used across every match.</p>
+          <a class="dl-btn" href="sensi.html" aria-disabled="true">Access Now</a>
+        </div>
+        <div class="card dl-card" data-reveal="up">
+          <div class="filetag">.ZIP</div>
+          <h3>HUD &amp; overlay pack</h3>
+          <p>Stream overlays and HUD layout, ready to import.</p>
+          <a class="dl-btn" href="hud.html" aria-disabled="true">Access share code</a>
+        </div>
+        <div class="card dl-card" data-reveal="up">
+          <div class="filetag">.PNG</div>
+          <h3>Wallpaper pack</h3>
+          <p>Desktop and mobile wallpapers from favorite clips.</p>
+          <a class="dl-btn" href="wall.html" aria-disabled="true">Exited to see</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">From the Squad</div>
+        <h2>What viewers are saying.</h2>
+        <p>Sample quotes — swap in real comments whenever you're ready.</p>
+      </div>
+      <div class="quote-row">
+        <div class="quote-card" data-reveal="up"><p>"The commentary makes even a loss feel like the funniest video of the week."</p><div class="who"><div class="avatar"></div><div><div class="who-name">Sample viewer</div><div class="who-meta">YOUTUBE COMMENT</div></div></div></div>
+        <div class="quote-card" data-reveal="up"><p>"Cleanest headshot montages I've seen from a Free Fire channel, honestly."</p><div class="who"><div class="avatar"></div><div><div class="who-name">Sample viewer</div><div class="who-meta">INSTAGRAM DM</div></div></div></div>
+        <div class="quote-card" data-reveal="up"><p>"Used the sensitivity settings and my aim genuinely got better in a week."</p><div class="who"><div class="avatar"></div><div><div class="who-name">Sample viewer</div><div class="who-meta">YOUTUBE COMMENT</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="wrap" style="max-width:840px;">
+      <div class="section-head" data-reveal="up">
+        <div class="eyebrow">FAQ</div>
+        <h2>Good to know.</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-q">What device and settings are used?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Full device specs and sensitivity values are in the Setup section above — download the settings file once it's attached.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How often do new videos drop?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>New uploads go up weekly — subscribe on YouTube and turn on notifications to catch every clip.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I get featured or send a clip?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Yes — send it over through the contact form below or on Instagram.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How do I reach out for collaborations?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Business inquiries go to the email address in the Contact section, or through Instagram DMs.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="contact-layout">
+        <div data-reveal="left">
+          <div class="eyebrow">Contact</div>
+          <h2 style="margin-bottom:var(--space-3);">Let's talk collabs, promos, or feedback.</h2>
+          <div class="contact-info-item">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4zM22 6l-10 7L2 6"/></svg></div>
+            <div><h4>Business email</h4><p>kollisantosh209@gmail.com</p></div>
+          </div>
+          <div class="contact-info-item">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5"/></svg></div>
+            <div><h4>Instagram</h4><p>@tmt_rocky_yt</p></div>
+          </div>
+          <div class="contact-info-item">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M23 12l-6.5 4V8z"/><rect x="1" y="5" width="16" height="14" rx="2"/></svg></div>
+            <div><h4>YouTube</h4><p>@tmt_official-y2x</p></div>
+          </div>
+        </div>
+        <div class="form-panel" data-reveal="right">
+          <form id="contact-form" novalidate>
+            <div class="field">
+              <input type="text" id="c-name" placeholder=" " required>
+              <label for="c-name">Your name</label>
+              <div class="hint">Enter your name.</div>
+            </div>
+            <div class="field">
+              <input type="email" id="c-email" placeholder=" " required>
+              <label for="c-email">Email address</label>
+              <div class="hint">Enter a valid email.</div>
+            </div>
+            <div class="field">
+              <textarea id="c-msg" placeholder=" " required></textarea>
+              <label for="c-msg">Message</label>
+              <div class="hint">Tell us what this is about.</div>
+            </div>
+            <button class="btn btn-solid" type="submit" style="width:100%; justify-content:center;">Send message</button>
+            <div class="form-status" id="form-status">Message ready — connect this form to your email service to go live.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:var(--space-2);"><span class="brand-mark">T</span>TMT OFFICIAL</div>
+        <p style="color:var(--muted); font-size:0.88rem; max-width:32ch;">High-energy Free Fire gameplay and funny commentary — new clips every week.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email" aria-label="Email for updates">
+          <button type="button">Notify me</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Explore</h5>
+        <ul><li><a href="#about">About</a></li><li><a href="#content">Content</a></li><li><a href="#clips">Clips</a></li><li><a href="#downloads">Downloads</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Channel</h5>
+        <ul><li><a href="#setup">Setup</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Follow</h5>
+        <div class="socials">
+          <a href="https://youtube.com/@tmt_official-y2x?si=K4ClM4ZsecYCEe5j" target="_blank" rel="noopener" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"> <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/> <path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          <a href="https://www.instagram.com/tmt_rocky_yt?igsh=anlxdmUwMGdkN3dh" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TMT OFFICIAL. All rights reserved.</span>
+      <span>Built for the squad.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div id="lightbox-embed"></div>
+  </div>
+</div>
+
+<script>
+// ---------- Intro sequence (2.5s) ----------
+(function(){
+  const intro = document.getElementById('intro');
+  const header = document.getElementById('site-header');
+  const canvas = document.getElementById('intro-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); addEventListener('resize', resize);
+  for(let i=0;i<70;i++){
+    particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.6+0.3, a: Math.random(), d: Math.random()*0.015 });
+  }
+  let raf;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.a += p.d;
+      const op = (Math.sin(p.a)+1)/2 * 0.6;
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255,220,200,${op})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    raf = requestAnimationFrame(draw);
+  }
+  draw();
+  setTimeout(()=>{
+    intro.classList.add('hide');
+    header.classList.add('ready');
+    setTimeout(()=>cancelAnimationFrame(raf), 800);
+  }, 2400);
+})();
+
+// ---------- Header scroll state + mobile menu ----------
+const header = document.getElementById('site-header');
+addEventListener('scroll', ()=>{ header.classList.toggle('scrolled', scrollY > 40); }, { passive:true });
+
+const menuBtn = document.getElementById('menu-open');
+const mobileMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', ()=>{
+  const open = mobileMenu.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', open);
+});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  mobileMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');
+}));
+
+// ---------- Reveal on scroll ----------
+const revealEls = document.querySelectorAll('[data-reveal]');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+}, { threshold:0.15 });
+revealEls.forEach(el=>io.observe(el));
+
+// ---------- Live subscriber count (YouTube Data API v3 — free tier) ----------
+// 1. Get a free API key: console.cloud.google.com -> new project -> enable "YouTube Data API v3" -> Credentials -> Create API key.
+// 2. Restrict the key (Application restrictions -> Websites) to your domain, so it can't be reused elsewhere.
+// 3. Paste the key below. Until you do, the site shows the fallback number instead.
+const YT_API_KEY = 'YOUR_YOUTUBE_API_KEY';
+const YT_CHANNEL_ID = 'UCeIoosu2QLT2P5HhWDsS_aA'; // TMT OFFICIAL
+
+function formatCount(n){
+  if(n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M+';
+  if(n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K+';
+  return String(n);
+}
+function animateSubCount(el, target){
+  const dur=1400, start=performance.now();
+  function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent = formatCount(Math.round(target*eased));
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+const subEl = document.getElementById('sub-count');
+async function loadLiveSubs(initial){
+  if(!YT_API_KEY || YT_API_KEY === 'YOUR_YOUTUBE_API_KEY'){
+    if(initial) animateSubCount(subEl, parseInt(subEl.dataset.fallback,10));
+    return;
+  }
+  try{
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YT_CHANNEL_ID}&key=${YT_API_KEY}`);
+    const data = await res.json();
+    const count = parseInt(data.items[0].statistics.subscriberCount, 10);
+    if(initial) animateSubCount(subEl, count); else subEl.textContent = formatCount(count);
+  } catch(err){
+    console.warn('Live subscriber count unavailable, showing fallback.', err);
+    if(initial) animateSubCount(subEl, parseInt(subEl.dataset.fallback,10));
+  }
+}
+loadLiveSubs(true);
+setInterval(()=>loadLiveSubs(false), 5*60*1000); // refresh every 5 minutes
+
+// ---------- Counters ----------
+const counters = document.querySelectorAll('[data-count]');
+const cio = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el = e.target;
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      const dur = 1400; const start = performance.now();
+      function tick(now){
+        const p = Math.min((now-start)/dur, 1);
+        const eased = 1 - Math.pow(1-p, 3);
+        el.textContent = Math.round(target*eased) + suffix;
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    }
+  });
+}, { threshold:0.5 });
+counters.forEach(c=>cio.observe(c));
+
+// ---------- Hero particle canvas ----------
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let w,h,particles=[];
+  function size(){ w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
+  size(); addEventListener('resize', size);
+  for(let i=0;i<50;i++){
+    particles.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.4+0.4, vy:Math.random()*0.15+0.05, a:Math.random()});
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.y -= p.vy; if(p.y < -5){ p.y = h+5; p.x = Math.random()*w; }
+      const op = (Math.sin(p.a + performance.now()*0.0004)+1)/2*0.5+0.15;
+      ctx.beginPath(); ctx.fillStyle = `rgba(230,235,245,${op})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) draw();
+})();
+
+// ---------- Clip gallery (CSV-driven) ----------
+// Fallback sample used only if videos.csv can't be fetched (e.g. opened via file:// with no server).
+const SAMPLE_CSV = `url,title,categories
+https://youtu.be/dQw4w9WgXcQ,One-tap AWM finish,headshots
+https://youtu.be/dQw4w9WgXcQ,Bush camping goes wrong,funny
+https://youtu.be/dQw4w9WgXcQ,Solo vs squad clutch,ranked
+https://youtu.be/dQw4w9WgXcQ,50K subscriber special,vlogs`;
+
+const grid = document.getElementById('clip-grid');
+const filterBar = document.getElementById('clip-filters');
+let allVideos = [];
+let usingFallback = false;
+
+function extractYouTubeId(url){
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function parseCategories(raw){
+  return (raw || '').split('|').map(c=>c.trim().toLowerCase()).filter(Boolean);
+}
+
+function buildFilters(videos){
+  const cats = [];
+  videos.forEach(v => v.categories.forEach(c => { if(!cats.includes(c)) cats.push(c); }));
+  filterBar.innerHTML = '<button class="filter-btn active" data-filter="all">All</button>' +
+    cats.map(c => `<button class="filter-btn" data-filter="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('');
+  filterBar.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      filterBar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderClips(btn.dataset.filter);
+    });
+  });
+}
+
+function renderClips(filter){
+  grid.innerHTML = '';
+  const filtered = allVideos.filter(v => filter==='all' || v.categories.includes(filter));
+  if(!filtered.length){
+    grid.innerHTML = '<div class="clip-status">No clips in this category yet.</div>';
+    return;
+  }
+  filtered.forEach(v=>{
+    const el = document.createElement('div');
+    el.className = 'clip';
+    const label = v.categories.length ? v.categories.map(c=>c.charAt(0).toUpperCase()+c.slice(1)).join(' · ') : '';
+    el.innerHTML = `
+      ${v.videoId ? `<img src="https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy">` : `<div class="thumb-mark">${v.title}</div>`}
+      <div class="play-ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="overlay"><div class="cat">${label}</div><h4>${v.title}</h4></div>`;
+    el.addEventListener("click", () => {
+        window.location.href = v.url;
+    });
+    grid.appendChild(el);
+  });
+}
+
+function openVideo(v){
+  const embedHost = document.getElementById('lightbox-embed');
+  if(v.videoId){
+    embedHost.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.videoId}?autoplay=1" title="${v.title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    document.getElementById('lightbox').classList.add('open');
+  } else {
+    window.open(v.url, '_blank', 'noopener');
+  }
+}
+function closeVideo(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-embed').innerHTML = '';
+}
+document.getElementById('lightbox-close').addEventListener('click', closeVideo);
+document.getElementById('lightbox').addEventListener('click', (e)=>{ if(e.target.id==='lightbox') closeVideo(); });
+addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeVideo(); });
+
+function processRows(rows){
+  allVideos = rows
+    .filter(r => r.url && r.url.trim())
+    .map(r => ({
+      url: r.url.trim(),
+      title: (r.title || 'Untitled clip').trim(),
+      categories: parseCategories(r.categories),
+      videoId: extractYouTubeId(r.url.trim())
+    }));
+  buildFilters(allVideos);
+  renderClips('all');
+}
+
+fetch('videos.csv')
+  .then(res => { if(!res.ok) throw new Error('not found'); return res.text(); })
+  .then(text => {
+    const parsed = Papa.parse(text, { header:true, skipEmptyLines:true });
+    processRows(parsed.data);
+  })
+  .catch(()=>{
+    usingFallback = true;
+    const parsed = Papa.parse(SAMPLE_CSV, { header:true, skipEmptyLines:true });
+    processRows(parsed.data);
+    grid.insertAdjacentHTML('afterbegin', '<div class="clip-status" style="grid-column:1/-1;">Showing sample clips — host this page with a <code>videos.csv</code> file next to it to load your real list.</div>');
+  });
+
+// ---------- FAQ accordion ----------
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click', ()=>{
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!wasOpen) item.classList.add('open');
+  });
+});
+
+// ---------- Contact form validation ----------
+const form = document.getElementById("contact-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("c-name").value;
+    const email = document.getElementById("c-email").value;
+    const message = document.getElementById("c-msg").value;
+
+    const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name,
+            email,
+            message
+        })
+    });
+
+    const result = await response.json();
+
+    document.getElementById("form-status").textContent = result.message;
+    document.getElementById("form-status").classList.add("show");
+});
+</script>
+</body>
+</html>

@@ -739,8 +739,10 @@
         <div class="brand" style="margin-bottom:var(--space-2);"><span class="brand-mark">T</span>TMT OFFICIAL</div>
         <p style="color:var(--muted); font-size:0.88rem; max-width:32ch;">High-energy Free Fire gameplay and funny commentary — new clips every week.</p>
         <div class="newsletter-form">
-          <input type="email" placeholder="Your email" aria-label="Email for updates">
-          <button type="button">Notify me</button>
+          <input
+  type="email"
+  id="notify-email" placeholder="Your email" aria-label="Email for updates" required>
+          <button type="button" id="notify-btn" >Notify me</button>
         </div>
       </div>
       <div class="footer-col">
@@ -1048,6 +1050,46 @@ const form = document.getElementById("contact-form").addEventListener("submit", 
 
     document.getElementById("form-status").textContent = result.message;
     document.getElementById("form-status").classList.add("show");
+});
+</script>
+<script>
+const notifyBtn = document.getElementById("notify-btn");
+
+notifyBtn.addEventListener("click", async () => {
+    const email = document.getElementById("notify-email").value.trim();
+
+    if (!email) {
+        alert("Please enter your email.");
+        return;
+    }
+
+    notifyBtn.disabled = true;
+    notifyBtn.textContent = "Subscribing...";
+
+    try {
+        const response = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        if (data.success) {
+            document.getElementById("notify-email").value = "";
+        }
+
+    } catch (err) {
+        alert("Something went wrong. Please try again.");
+        console.error(err);
+    }
+
+    notifyBtn.disabled = false;
+    notifyBtn.textContent = "Notify me";
 });
 </script>
 </body>
